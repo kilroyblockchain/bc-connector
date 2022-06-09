@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import { json, urlencoded } from 'express';
+import 'dotenv/config';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
