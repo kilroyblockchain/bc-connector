@@ -17,7 +17,6 @@ export class BcQueryService {
   ): Promise<Response> {
     await new Promise((r) => setTimeout(r, 2000));
     const logger = new Logger('QueryChaincode');
-    let responsePayload = null;
     const peerNames = JSON.parse(process.env.PEER_NAMES);
     const client = await this.bcUserService.getClientInfoForOrg(
       orgName,
@@ -38,7 +37,7 @@ export class BcQueryService {
     proposalRequestDto.chaincodeId = sdkRequest.chaincodeName;
     proposalRequestDto.fcn = sdkRequest.functionName;
     proposalRequestDto.args = sdkRequest.args;
-    responsePayload = await channel.queryByChaincode(proposalRequestDto);
+    const responsePayload = await channel.queryByChaincode(proposalRequestDto);
     if (
       responsePayload &&
       responsePayload[0] &&

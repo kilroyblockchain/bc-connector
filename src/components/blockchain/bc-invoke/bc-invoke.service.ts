@@ -31,13 +31,11 @@ export class BcInvokeService {
   ): Promise<SDKResponseDto> {
     const logger = new Logger('InvokeChaincode');
     const peerNames = JSON.parse(process.env.PEER_NAMES);
-    let client: Client = null;
-    let channel: Client.Channel = null;
-    client = await this.bcUserService.getClientInfoForOrg(
+    const client = await this.bcUserService.getClientInfoForOrg(
       orgName,
       loggedInUserId,
     );
-    channel = await client.getChannel(sdkRequest.channelName);
+    const channel = await client.getChannel(sdkRequest.channelName);
     if (!channel) {
       logger.error(
         'Channel ' +
