@@ -1,23 +1,19 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 export class SDKRequestDto {
   @IsString()
-  channelName: string;
-  @IsString()
-  chaincodeName: string;
-  @IsString()
-  functionName: string;
   @IsNotEmpty()
-  args: any;
+  channelName: string;
 
-  constructor(
-    channelName?: string,
-    chaincodeName?: string,
-    functionName?: string,
-    args?: any,
-  ) {
-    this.channelName = channelName;
-    this.chaincodeName = chaincodeName;
-    this.functionName = functionName;
-    this.args = args;
-  }
+  @IsString()
+  @IsNotEmpty()
+  chaincodeName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  functionName: string;
+
+  @IsNotEmpty()
+  @IsArray()
+  // eslint-disable-next-line
+  args: any;
 }

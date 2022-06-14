@@ -10,6 +10,7 @@ export class SDKResponseDto {
   functionName: string;
 
   @IsNotEmpty()
+  // eslint-disable-next-line
   args: any;
 
   @IsString()
