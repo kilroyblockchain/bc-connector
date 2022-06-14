@@ -7,7 +7,8 @@ import { TransactionRequestDto } from '../dto/transaction-request.dto';
 import { BcUserService } from '../bc-user/bc-user.service';
 import Client from 'fabric-client';
 import { SDKResponseDto } from 'src/@core/common/dto/sdk-response.dto';
-import { ThrowBcInvokeException } from 'src/@core/common/exceptions/bc-invoke-exceptions';
+import { ChaincodeResponseDto } from 'src/@core/common/dto/chaincode-response.dto';
+import { HandleChaincodeException } from 'src/@core/common/exceptions/chaincode-exceptions';
 
 @Injectable()
 export class BcInvokeService {
@@ -30,56 +31,52 @@ export class BcInvokeService {
   ): Promise<SDKResponseDto> {
     const logger = new Logger('InvokeChaincode');
     const peerNames = JSON.parse(process.env.PEER_NAMES);
-    try {
-      const client = await this.bcUserService.getClientInfoForOrg(
-        orgName,
-        loggedInUserId,
+    let client: Client = null;
+    let channel: Client.Channel = null;
+    client = await this.bcUserService.getClientInfoForOrg(
+      orgName,
+      loggedInUserId,
+    );
+    channel = await client.getChannel(sdkRequest.channelName);
+    if (!channel) {
+      logger.error(
+        'Channel ' +
+          sdkRequest.channelName +
+          ' was not defined in the connection profile',
       );
-      const channel = client.getChannel(sdkRequest.channelName);
-      if (!channel) {
-        logger.error(
-          'Channel ' +
-            sdkRequest.channelName +
-            ' was not defined in the connection profile',
-        );
-        throw new Error(CHANNEL_CONSTANT.CHANNEL_NOT_FOUND);
-      }
-
-      // Generate new Transaction ID
-      const txId = client.newTransactionID();
-
-      const proposalRequest = new ProposalRequestDto();
-      proposalRequest.targets = peerNames;
-      proposalRequest.chaincodeId = sdkRequest.chaincodeName;
-      proposalRequest.fcn = sdkRequest.functionName;
-      proposalRequest.args = sdkRequest.args;
-      proposalRequest.chainId = sdkRequest.channelName;
-      proposalRequest.txId = txId;
-
-      // Calls send proposal function that sends the transaction proposal to the peer
-      const sendProposalResponse = await this.sendProposal(
-        channel,
-        proposalRequest,
-      );
-
-      const proposalResponses =
-        sendProposalResponse[0] as Client.ProposalResponse[];
-      const proposal: Client.Proposal = sendProposalResponse[1];
-
-      const transactionRequestDto = new TransactionRequestDto();
-      transactionRequestDto.txId = txId;
-      transactionRequestDto.proposalResponses = proposalResponses;
-      transactionRequestDto.proposal = proposal;
-
-      // Calls send transaction function that sends the endorsed transaction to the orderer
-      await this.sendTransaction(channel, transactionRequestDto);
-
-      return this.buildSDKResponseDto(sdkRequest, orgName);
-      // return sdkRequest;
-    } catch (error) {
-      logger.error(error);
-      ThrowBcInvokeException(error);
+      throw new Error(CHANNEL_CONSTANT.CHANNEL_NOT_FOUND);
     }
+
+    // Generate new Transaction ID
+    const txId = client.newTransactionID();
+
+    const proposalRequest = new ProposalRequestDto();
+    proposalRequest.targets = peerNames;
+    proposalRequest.chaincodeId = sdkRequest.chaincodeName;
+    proposalRequest.fcn = sdkRequest.functionName;
+    proposalRequest.args = sdkRequest.args;
+    proposalRequest.chainId = sdkRequest.channelName;
+    proposalRequest.txId = txId;
+
+    // Calls send proposal function that sends the transaction proposal to the peer
+    const sendProposalResponse = await this.sendProposal(
+      channel,
+      proposalRequest,
+    );
+
+    const proposalResponses =
+      sendProposalResponse[0] as Client.ProposalResponse[];
+    const proposal: Client.Proposal = sendProposalResponse[1];
+
+    const transactionRequestDto = new TransactionRequestDto();
+    transactionRequestDto.txId = txId;
+    transactionRequestDto.proposalResponses = proposalResponses;
+    transactionRequestDto.proposal = proposal;
+
+    // Calls send transaction function that sends the endorsed transaction to the orderer
+    await this.sendTransaction(channel, transactionRequestDto);
+
+    return this.buildSDKResponseDto(sdkRequest, orgName);
   }
 
   /**
@@ -105,8 +102,17 @@ export class BcInvokeService {
     const proposalResponses = results[0];
     for (const i in proposalResponses) {
       if (proposalResponses[i] instanceof Error) {
-        logger.error(proposalResponses[i].toString());
-        throw new Error(proposalResponses[i].toString());
+        const responsePayloadString = proposalResponses[i].toString();
+        if (responsePayloadString.includes('statusCode')) {
+          const responseError = responsePayloadString.split('{');
+          const errorMessage = '{' + responseError[1];
+          const responseErrorToChaincode: ChaincodeResponseDto =
+            JSON.parse(errorMessage);
+          logger.error(responseError);
+          await HandleChaincodeException(responseErrorToChaincode);
+        }
+        logger.error(responsePayloadString);
+        throw new Error(responsePayloadString);
       } else if (
         // true
         (proposalResponses[i] as Client.ProposalResponse).response &&

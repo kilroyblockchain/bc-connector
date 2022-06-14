@@ -129,30 +129,4 @@ export class BcUserService {
       await ThrowBcUserException(err);
     }
   }
-
-  // async checkUser(userName: string, orgName: string): Promise<Response> {
-  //   const client = await this.getClientInfoForOrg(orgName);
-  //   if (!clientResponse.success) {
-  //     return clientResponse;
-  //   }
-
-  //   const client: Client = clientResponse.data;
-  //   const hashedUserName = GenerateSHA256Hash(userName);
-  //   const user = await client.getUserContext(hashedUserName, true);
-  //   if (!user) {
-  //     throw new NotFoundException(['User Does not Exist']);
-  //   }
-
-  // const hashedLoginUser = GenerateSHA256Hash(loggedInUserId);
-  // console.log('HASHED===>', hashedLoginUser);
-  // const loginUserContext = await client.getUserContext(
-  //   hashedLoginUser,
-  //   true,
-  // );
-  // if (!loginUserContext){
-  //   logger.error(USER_CONSTANT.USER_NOT_FOUND);
-  //   throw new Error('')
-  // }
-  // console.log('LOGIN USER====>', loginUserContext);
-  // }
 }
