@@ -6,5 +6,6 @@ export class ProposalRequestDto {
   args: Array<string>;
   chainId: string;
   txId: Client.TransactionId;
+  // eslint-disable-next-line
   transientMap: any;
 }
