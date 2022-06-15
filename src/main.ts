@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import helmet from 'helmet';
 import { json, urlencoded } from 'express';
 import 'dotenv/config';
+import { GlobalInterceptor } from './@core/interceptor/GlobalInterceptor';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
@@ -13,6 +14,7 @@ async function bootstrap(): Promise<void> {
   app.use(helmet());
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
+  app.useGlobalInterceptors(new GlobalInterceptor());
 
   const PORT = process.env.APP_PORT || 5004;
   await app.listen(PORT || 5004);
