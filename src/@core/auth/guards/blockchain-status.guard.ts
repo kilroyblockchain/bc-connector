@@ -28,6 +28,10 @@ export class BlockchainStatusGuard implements CanActivate {
         'Organization name not found on the header',
       ]);
     }
+    if (!headers.channel_name) {
+      logger.error('Channel name not found on the header: channel_name');
+      throw new BadRequestException(['Channel name not found on the header']);
+    }
     try {
       await this.bcUserService.getClientInfoForOrg(
         headers.org_name,

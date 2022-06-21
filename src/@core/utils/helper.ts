@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 
-export const generateUniqueId = (): string => {
+export const GenerateUniqueId = (): string => {
   return crypto.randomBytes(20).toString('hex');
 };
 
