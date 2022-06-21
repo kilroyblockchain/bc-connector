@@ -54,4 +54,22 @@ export class ProjectController {
       ),
     ).setStatusCode(HttpStatus.OK);
   }
+
+  @Get('history/:projectId')
+  @UseGuards(BlockchainStatusGuard, AuthorizationGuard)
+  @HttpCode(HttpStatus.OK)
+  async getProjectHistory(
+    @Param('projectId') projectId: string,
+    @Headers() header,
+  ): Promise<Response> {
+    return new Response(
+      'Project History Fetched',
+      await this.projectService.getProjectHistory(
+        projectId,
+        header.user_id,
+        header.org_name,
+        header.channel_name,
+      ),
+    ).setStatusCode(HttpStatus.OK);
+  }
 }

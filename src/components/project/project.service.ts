@@ -81,6 +81,39 @@ export class ProjectService {
     return this.buildProjectResponseDto(response.args);
   }
 
+  /**
+   * GetProjectHistory Function calls 'GetProjectHistory' chaincode functions on chaincode 'project' which returns all the state of project stored on the basis of project id
+   *
+   *
+   * @param {string} projectId - Id of the project state to fetch
+   * @param {string} loggedInUserId - Logged In User Id
+   * @param {string} orgName - Name of the Organization to be used for transaction
+   * @param {string} channelName - Name of the channel to send the transaction
+   * @returns {Promise<ProjectResponseDto>} - Returns Promise of ProjectResponseDto
+   *
+   *
+   **/
+  async getProjectHistory(
+    projectId: string,
+    loggedInUserId: string,
+    orgName: string,
+    channelName: string,
+  ): Promise<ProjectResponseDto[]> {
+    const chaincodeFunctionName = 'GetProjectHistory';
+
+    const sDKRequestDto = new SDKRequestDto();
+    sDKRequestDto.chaincodeName = this.CHAINCODE_NAME;
+    sDKRequestDto.functionName = chaincodeFunctionName;
+    sDKRequestDto.args = [projectId];
+    sDKRequestDto.channelName = channelName;
+    const response = await this.bcQueryService.queryChaincode(
+      sDKRequestDto,
+      loggedInUserId,
+      orgName,
+    );
+    return this.buildProjectResponseDtoList(response.args);
+  }
+
   private buildProjectResponseDto(args: any): ProjectResponseDto {
     const projectResponseDto: ProjectResponseDto = {
       projectId: args.id,
@@ -92,5 +125,22 @@ export class ProjectService {
       recordDate: args.recordDate == null ? null : args.recordDate,
     };
     return projectResponseDto;
+  }
+
+  private buildProjectResponseDtoList(args: any): ProjectResponseDto[] {
+    const projectResponseDtoList = [];
+    for (const data of args) {
+      const projectResponseDto = new ProjectResponseDto();
+      projectResponseDto.projectId = data.name == null ? null : data.id;
+      projectResponseDto.name = data.name == null ? null : data.name;
+      projectResponseDto.detail = data.name == null ? null : data.detail;
+      projectResponseDto.domain = data.name == null ? null : data.domain;
+      projectResponseDto.members = data.name == null ? null : data.members;
+      projectResponseDto.entryUser = data.name == null ? null : data.entryUser;
+      projectResponseDto.recordDate =
+        data.name == null ? null : data.recordDate;
+      projectResponseDtoList.push(projectResponseDto);
+    }
+    return projectResponseDtoList;
   }
 }
