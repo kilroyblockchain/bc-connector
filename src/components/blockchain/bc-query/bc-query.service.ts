@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CHANNEL_CONSTANT } from 'src/@core/common/constants/channel.constant';
 import { ChaincodeResponseDto } from 'src/@core/common/dto/chaincode-response.dto';
 import { SDKRequestDto } from 'src/@core/common/dto/sdk-request.dto';
+import { SDKResponseDto } from 'src/@core/common/dto/sdk-response.dto';
 import { HandleChaincodeException } from 'src/@core/common/exceptions/chaincode-exceptions';
 import { BcUserService } from '../bc-user/bc-user.service';
 import { ProposalRequestDto } from '../dto/proposal-request.dto';
@@ -14,7 +15,7 @@ export class BcQueryService {
     sdkRequest: SDKRequestDto,
     loggedInUserId: string,
     orgName: string,
-  ): Promise<Response> {
+  ): Promise<SDKResponseDto> {
     await new Promise((r) => setTimeout(r, 2000));
     const logger = new Logger('QueryChaincode');
     const peerNames = JSON.parse(process.env.PEER_NAMES);
@@ -54,38 +55,28 @@ export class BcQueryService {
           await HandleChaincodeException(responseErrorToChaincode);
         }
         throw new Error(responsePayloadString);
-        // await this.HandleKnownError(responsePayloadString);
       }
       const responseBuffer = responsePayload[0].toString();
       const response: ChaincodeResponseDto = JSON.parse(responseBuffer);
-      return response.result;
+      sdkRequest.args = response.result;
+      return this.buildSDKResponseDto(sdkRequest, orgName);
     } else {
       logger.error('Response payload is null');
       throw new Error('Response payload is null');
-      // await this.HandleKnownError('Response payload is null');
     }
   }
 
-  // private async HandleCommonError(
-  //   chaincodeResponseDto: ChaincodeResponseDto,
-  // ): Promise<void> {
-  //   switch (chaincodeResponseDto.statusCode) {
-  //     case HttpStatus.BAD_REQUEST:
-  //       throw new BadRequestException([chaincodeResponseDto.message]);
-  //     case HttpStatus.NOT_FOUND:
-  //       throw new NotFoundException([chaincodeResponseDto.message]);
-  //     default:
-  //       throw new InternalServerErrorException([chaincodeResponseDto.message]);
-  //   }
-  // }
-
-  // private async HandleKnownError(errorString: string): Promise<void> {
-  //   if (errorString.includes('Incorrect number of params')) {
-  //     throw new BadRequestException([errorString]);
-  //   }
-  //   if (errorString.includes('not found')) {
-  //     throw new NotFoundException([errorString]);
-  //   }
-  //   throw new InternalServerErrorException([errorString]);
-  // }
+  private buildSDKResponseDto(
+    sDKRequestDto: SDKRequestDto,
+    orgName: string,
+  ): SDKResponseDto {
+    const sDKResponseDto: SDKResponseDto = {
+      channelName: sDKRequestDto.channelName,
+      chaincodeName: sDKRequestDto.chaincodeName,
+      functionName: sDKRequestDto.functionName,
+      args: sDKRequestDto.args,
+      orgName: orgName,
+    };
+    return sDKResponseDto;
+  }
 }
