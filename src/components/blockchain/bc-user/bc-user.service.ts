@@ -37,8 +37,7 @@ export class BcUserService {
 
       if (userName) {
         // Hash Username
-        const hashedUsername = GenerateSHA256Hash(userName);
-        const user = await client.getUserContext(hashedUsername, true);
+        const user = await client.getUserContext(userName, true);
         if (!user) {
           logger.error('User ' + userName + ' not found on the wallet');
           throw new Error(USER_CONSTANT.USER_NOT_FOUND);
