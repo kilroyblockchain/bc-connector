@@ -1,9 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import Client, * as hfc from 'fabric-client';
 import { USER_CONSTANT } from 'src/@core/common/constants/user.constant';
-import { GenerateSHA256Hash } from 'src/@core/utils/helper';
+import { GenerateSHA256Hash, GenerateUniqueId } from 'src/@core/utils/helper';
 import { ThrowBcUserException } from 'src/@core/common/exceptions/throw-bc-user-exceptions';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { BcUserResponseDto } from './dto/bc-user-response.dto';
 
 @Injectable()
 export class BcUserService {
@@ -13,14 +14,16 @@ export class BcUserService {
    *
    *
    * @param {string} orgName - Name of the organization to get the connection profile details
-   * @param {string} userName - Name of the user to get the detail
+   * @param {string} key - Key of the user to get the detail
+   * @param {string} salt - Unique string associated with the key generated
    * @returns {Promise<Client>} - Returns response type Client
    *
    *
    **/
   async getClientInfoForOrg(
     orgName: string,
-    userName?: string,
+    key?: string,
+    salt?: string,
   ): Promise<Client> {
     try {
       const logger = new Logger('GetClientForOrg');
@@ -35,14 +38,16 @@ export class BcUserService {
       // on the settings in the client section of the connection profile
       await client.initCredentialStores();
 
-      if (userName) {
+      if (key) {
+        const generatedKeyData = this.generateKey(key, salt);
+        const keyHash = generatedKeyData[0];
         // Hash Username
-        const user = await client.getUserContext(userName, true);
+        const user = await client.getUserContext(keyHash, true);
         if (!user) {
-          logger.error('User ' + userName + ' not found on the wallet');
-          throw new Error(USER_CONSTANT.USER_NOT_FOUND);
+          logger.error('Invalid Key');
+          throw new Error('Invalid Key');
         }
-        logger.log('User ' + userName + ' found on the wallet');
+        logger.log('User found on the wallet');
       }
       return client;
     } catch (err) {
@@ -69,31 +74,36 @@ export class BcUserService {
   async enrollAndRegisterUser(
     registerUserDto: RegisterUserDto,
     orgName: string,
-  ): Promise<string[]> {
+  ): Promise<BcUserResponseDto> {
     const logger = new Logger('EnrollAndRegisterUser');
     try {
       const caAdminId = process.env.CA_ADMIN_ID;
       const caAdminPassword = process.env.CA_ADMIN_PWD;
       const client = await this.getClientInfoForOrg(orgName);
 
+      const registerUserDtoString = JSON.stringify(registerUserDto);
       // Hash Username
-      const hashedUsername = GenerateSHA256Hash(registerUserDto.userName);
+
+      const hashedData = GenerateSHA256Hash(registerUserDtoString);
+      const generatedKeyData = this.generateKey(hashedData);
+      const key = generatedKeyData[0];
+      const salt = generatedKeyData[1];
 
       // client can now act as an agent for organization
       // first check to see if the user is already on the wallet
-      let user = await client.getUserContext(hashedUsername, true);
+      let user = await client.getUserContext(key, true);
       if (user && user.isEnrolled()) {
         logger.error(USER_CONSTANT.USER_ALREADY_REGISTERED);
         throw new Error(
           'User ' +
-            registerUserDto.userName +
+            registerUserDto.email +
             ' Is Already Registered And Enrolled',
         );
       } else {
         // user was not enrolled, so we will need an admin user object to register
         logger.log(
           'User ' +
-            registerUserDto.userName +
+            registerUserDto.email +
             ' was not enrolled, so we will need admin user object to register',
         );
 
@@ -105,27 +115,34 @@ export class BcUserService {
         const caClient = client.getCertificateAuthority();
         const secret = await caClient.register(
           {
-            enrollmentID: hashedUsername,
+            enrollmentID: key,
             affiliation: 'org1.department1',
           },
           adminUserObj,
         );
-        logger.log(USER_CONSTANT.USER_SECRET_FOUND + registerUserDto.userName);
+        logger.log(USER_CONSTANT.USER_SECRET_FOUND + registerUserDto.email);
         // Add User credentials to the wallet
         user = await client.setUserContext({
-          username: hashedUsername,
+          username: key,
           password: secret,
         });
         logger.log(
           'Successfully enrolled username ' +
-            registerUserDto.userName +
+            registerUserDto.email +
             ' and setUserContext on the client object',
         );
       }
-      return [hashedUsername];
+      return new BcUserResponseDto(hashedData, salt);
     } catch (err) {
       logger.error(err);
       await ThrowBcUserException(err);
     }
+  }
+
+  private generateKey(hashedData: string, salt?: string): string[] {
+    if (!salt) {
+      salt = GenerateUniqueId();
+    }
+    return [GenerateSHA256Hash(salt + hashedData + salt), salt];
   }
 }

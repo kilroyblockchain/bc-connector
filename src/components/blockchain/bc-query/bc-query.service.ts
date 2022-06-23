@@ -13,15 +13,17 @@ export class BcQueryService {
 
   async queryChaincode(
     sdkRequest: SDKRequestDto,
-    loggedInUserId: string,
+    key: string,
     orgName: string,
+    salt: string,
   ): Promise<SDKResponseDto> {
     await new Promise((r) => setTimeout(r, 2000));
     const logger = new Logger('QueryChaincode');
     const peerNames = JSON.parse(process.env.PEER_NAMES);
     const client = await this.bcUserService.getClientInfoForOrg(
       orgName,
-      loggedInUserId,
+      key,
+      salt,
     );
     const channel = client.getChannel(sdkRequest.channelName);
     if (!channel) {

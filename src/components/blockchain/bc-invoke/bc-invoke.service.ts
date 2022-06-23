@@ -26,14 +26,17 @@ export class BcInvokeService {
    **/
   async invokeChaincode(
     sdkRequest: SDKRequestDto,
-    loggedInUserId: string,
+    key: string,
     orgName: string,
+    salt: string,
   ): Promise<SDKResponseDto> {
     const logger = new Logger('InvokeChaincode');
     const peerNames = JSON.parse(process.env.PEER_NAMES);
+    console.log('REQUEST===>', sdkRequest);
     const client = await this.bcUserService.getClientInfoForOrg(
       orgName,
-      loggedInUserId,
+      key,
+      salt,
     );
     const channel = await client.getChannel(sdkRequest.channelName);
     if (!channel) {
@@ -46,7 +49,13 @@ export class BcInvokeService {
     }
 
     // Generate new Transaction ID
-    const txId = client.newTransactionID();
+    let txId;
+    try {
+      txId = await client.newTransactionID();
+    } catch (err) {
+      console.log('err------>', err);
+    }
+    console.log('txId===>', txId);
 
     const proposalRequest = new ProposalRequestDto();
     proposalRequest.targets = peerNames;
