@@ -28,8 +28,9 @@ export class BcQueryController {
       'Data Fetched Successfully',
       await this.bcQueryService.queryChaincode(
         sDKRequestDto,
-        header.user_id,
+        header.key,
         header.org_name,
+        header.salt,
       ),
     ).setStatusCode(HttpStatus.OK);
   }

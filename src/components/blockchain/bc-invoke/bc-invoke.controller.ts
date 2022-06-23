@@ -25,8 +25,9 @@ export class BcInvokeController {
       'Data Stored Successfully',
       await this.bcInvokeService.invokeChaincode(
         sDKRequestDto,
-        header.user_id,
+        header.key,
         header.org_name,
+        header.salt,
       ),
     ).setStatusCode(HttpStatus.OK);
   }

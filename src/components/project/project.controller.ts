@@ -30,9 +30,10 @@ export class ProjectController {
       'Project Stored',
       await this.projectService.storeProject(
         storeProjectDto,
-        header.user_id,
+        header.key,
         header.org_name,
         header.channel_name,
+        header.salt,
       ),
     ).setStatusCode(HttpStatus.OK);
   }
@@ -48,9 +49,10 @@ export class ProjectController {
       'Project Fetched',
       await this.projectService.getProject(
         projectId,
-        header.user_id,
+        header.key,
         header.org_name,
         header.channel_name,
+        header.salt,
       ),
     ).setStatusCode(HttpStatus.OK);
   }
@@ -66,9 +68,10 @@ export class ProjectController {
       'Project History Fetched',
       await this.projectService.getProjectHistory(
         projectId,
-        header.user_id,
+        header.key,
         header.org_name,
         header.channel_name,
+        header.salt,
       ),
     ).setStatusCode(HttpStatus.OK);
   }

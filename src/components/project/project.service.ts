@@ -19,22 +19,23 @@ export class ProjectService {
    *
    *
    * @param {StoreProjectDto} storeProjectDto - Object of StoreProjectDto
-   * @param {string} loggedInUserId - Logged In User Id
+   * @param {string} key - Key of the user to get the detail
    * @param {string} orgName - Name of the Organization to be used for transaction
    * @param {string} channelName - Name of the channel to send the transaction
+   * @param {string} salt - Unique string associated with the key generated
    * @returns {Promise<ProjectResponseDto>} - Returns Promise of ProjectResponseDto
    *
    *
    **/
   async storeProject(
     storeProjectDto: StoreProjectDto,
-    loggedInUserId: string,
+    key: string,
     orgName: string,
     channelName: string,
+    salt: string,
   ): Promise<ProjectResponseDto> {
     const chaincodeFunctionName = 'StoreProject';
 
-    storeProjectDto.entryUser = loggedInUserId;
     const sDKRequestDto = new SDKRequestDto();
     sDKRequestDto.chaincodeName = this.CHAINCODE_NAME;
     sDKRequestDto.functionName = chaincodeFunctionName;
@@ -42,8 +43,9 @@ export class ProjectService {
     sDKRequestDto.channelName = channelName;
     const response = await this.bcInvokeService.invokeChaincode(
       sDKRequestDto,
-      loggedInUserId,
+      key,
       orgName,
+      salt,
     );
     return this.buildProjectResponseDto(JSON.parse(response.args));
   }
@@ -53,18 +55,20 @@ export class ProjectService {
    *
    *
    * @param {string} projectId - Id of the project state to fetch
-   * @param {string} loggedInUserId - Logged In User Id
+   * @param {string} key - Key of the user to get the detail
    * @param {string} orgName - Name of the Organization to be used for transaction
    * @param {string} channelName - Name of the channel to send the transaction
+   * @param {string} salt - Unique string associated with the key generated
    * @returns {Promise<ProjectResponseDto>} - Returns Promise of ProjectResponseDto
    *
    *
    **/
   async getProject(
     projectId: string,
-    loggedInUserId: string,
+    key: string,
     orgName: string,
     channelName: string,
+    salt,
   ): Promise<ProjectResponseDto> {
     const chaincodeFunctionName = 'GetProject';
 
@@ -75,8 +79,9 @@ export class ProjectService {
     sDKRequestDto.channelName = channelName;
     const response = await this.bcQueryService.queryChaincode(
       sDKRequestDto,
-      loggedInUserId,
+      key,
       orgName,
+      salt,
     );
     return this.buildProjectResponseDto(response.args);
   }
@@ -86,18 +91,20 @@ export class ProjectService {
    *
    *
    * @param {string} projectId - Id of the project state to fetch
-   * @param {string} loggedInUserId - Logged In User Id
+   * @param {string} key - Key of the user to get the detail
    * @param {string} orgName - Name of the Organization to be used for transaction
    * @param {string} channelName - Name of the channel to send the transaction
+   * @param {string} salt - Unique string associated with the key generated
    * @returns {Promise<ProjectResponseDto>} - Returns Promise of ProjectResponseDto
    *
    *
    **/
   async getProjectHistory(
     projectId: string,
-    loggedInUserId: string,
+    key: string,
     orgName: string,
     channelName: string,
+    salt,
   ): Promise<ProjectResponseDto[]> {
     const chaincodeFunctionName = 'GetProjectHistory';
 
@@ -108,8 +115,9 @@ export class ProjectService {
     sDKRequestDto.channelName = channelName;
     const response = await this.bcQueryService.queryChaincode(
       sDKRequestDto,
-      loggedInUserId,
+      key,
       orgName,
+      salt,
     );
     return this.buildProjectResponseDtoList(response.args);
   }
