@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  dev:
+    container_name: bta_bc_connector_dev
+    image: bta-bc-connector-dev:1.0.0
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: npm run start:debug
+    ports:
+      - ${APP_PORT}:3000
+    networks:
+      - bta-bc-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+
+  prod:
+    container_name: bta_bc_connector_prod
+    image: bta-bc-connector-prod:1.0.0
+    build:
+      context: .
+      target: production
+      dockerfile: ./Dockerfile
+    command: npm run start:prod
+    ports:
+      - ${APP_PORT}:3000
+    networks:
+      - bta-bc-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+
+networks:
+  bta-bc-network:
