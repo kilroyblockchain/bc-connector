@@ -16,8 +16,8 @@ async function bootstrap(): Promise<void> {
   app.use(urlencoded({ extended: true, limit: '50mb' }));
   app.useGlobalInterceptors(new GlobalInterceptor());
 
-  const PORT = process.env.APP_PORT || 5004;
-  await app.listen(PORT || 5004);
+  const PORT = process.env.PORT || 3000;
+  await app.listen(PORT || 3000);
   console.info(
     'Kilroy Blockchain Connector',
     `Server running on 🚀 http://localhost:${PORT}`,
