@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  dev:
+    container_name: bc_connector_template_dev
+    image: bc-connector-template-dev:1.0.0
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: npm run start:debug
+    ports:
+      - 5004:3000
+    networks:
+      - obc-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+
+  prod:
+    container_name: bc_connector_template_prod
+    image: bc-connector-template-prod:1.0.0
+    build:
+      context: .
+      target: production
+      dockerfile: ./Dockerfile
+    command: npm run start:prod
+    ports:
+      - 5104:3000
+    networks:
+      - obc-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+
+networks:
+  obc-network:
