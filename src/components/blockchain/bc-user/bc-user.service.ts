@@ -113,10 +113,12 @@ export class BcUserService {
         });
         logger.log(USER_CONSTANT.USER_CONTEXT_SET_SUCCESS + caAdminId);
         const caClient = client.getCertificateAuthority();
-        const secret = await caClient.register(
+        await caClient.register(
           {
             enrollmentID: key,
+            enrollmentSecret: key + salt,
             affiliation: 'org1.department1',
+            maxEnrollments: 50,
           },
           adminUserObj,
         );
@@ -124,10 +126,64 @@ export class BcUserService {
         // Add User credentials to the wallet
         user = await client.setUserContext({
           username: key,
-          password: secret,
+          password: key + salt,
         });
         logger.log(
           'Successfully enrolled username ' +
+            registerUserDto.email +
+            ' and setUserContext on the client object',
+        );
+      }
+      return new BcUserResponseDto(hashedData, salt);
+    } catch (err) {
+      logger.error(err);
+      await ThrowBcUserException(err);
+    }
+  }
+
+  async userReEnrollment(
+    registerUserDto: RegisterUserDto,
+    orgName: string,
+  ): Promise<BcUserResponseDto> {
+    const logger = new Logger('EnrollAndRegisterUser');
+    try {
+      const client = await this.getClientInfoForOrg(orgName);
+
+      const registerUserDtoString = JSON.stringify(registerUserDto);
+      // Hash Username
+
+      const hashedData = GenerateSHA256Hash(registerUserDtoString);
+      const generatedKeyData = this.generateKey(hashedData);
+      const key = generatedKeyData[0];
+      const salt = generatedKeyData[1];
+
+      // client can now act as an agent for organization
+      // first check to see if the user is already on the wallet
+      const user = await client.getUserContext(key, true);
+      if (user && user.isEnrolled()) {
+        logger.error(USER_CONSTANT.USER_ALREADY_REGISTERED);
+        throw new Error(
+          'User ' +
+            registerUserDto.email +
+            ' Is Already Registered And Enrolled',
+        );
+      } else {
+        // user was not enrolled, so we will need an admin user object to register
+        logger.log(
+          'User ' +
+            registerUserDto.email +
+            ' was not enrolled, so we will need admin user object to register',
+        );
+
+        const loginUser = await client.setUserContext({
+          username: key,
+          password: key + salt,
+        });
+        const caClient = client.getCertificateAuthority();
+        await caClient.reenroll(loginUser, [{ name: key, optional: true }]);
+
+        logger.log(
+          'Successfully re-enrolled user ' +
             registerUserDto.email +
             ' and setUserContext on the client object',
         );

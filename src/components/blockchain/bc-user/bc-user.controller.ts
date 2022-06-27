@@ -55,4 +55,20 @@ export class BcUserController {
       ),
     ).setStatusCode(HttpStatus.OK);
   }
+
+  @Post('re-enroll')
+  @UseGuards(BlockchainStatusGuard, AuthorizationGuard)
+  @HttpCode(HttpStatus.OK)
+  async enroll(
+    @Body() registerUserDto: RegisterUserDto,
+    @Headers() header,
+  ): Promise<Response> {
+    return new Response(
+      'User Re-enrolled Successfully',
+      await this.bcUserService.userReEnrollment(
+        registerUserDto,
+        header.org_name,
+      ),
+    ).setStatusCode(HttpStatus.OK);
+  }
 }
