@@ -32,7 +32,6 @@ export class BcInvokeService {
   ): Promise<SDKResponseDto> {
     const logger = new Logger('InvokeChaincode');
     const peerNames = JSON.parse(process.env.PEER_NAMES);
-    console.log('REQUEST===>', sdkRequest);
     const client = await this.bcUserService.getClientInfoForOrg(
       orgName,
       key,
@@ -49,13 +48,7 @@ export class BcInvokeService {
     }
 
     // Generate new Transaction ID
-    let txId;
-    try {
-      txId = await client.newTransactionID();
-    } catch (err) {
-      console.log('err------>', err);
-    }
-    console.log('txId===>', txId);
+    const txId = await client.newTransactionID();
 
     const proposalRequest = new ProposalRequestDto();
     proposalRequest.targets = peerNames;
