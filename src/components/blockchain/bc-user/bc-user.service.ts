@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import Client, * as hfc from 'fabric-client';
 import { USER_CONSTANT } from 'src/@core/common/constants/user.constant';
-import { GenerateSHA256Hash, GenerateUniqueId } from 'src/@core/utils/helper';
+import { GenerateSHA1Hash, GenerateSHA256Hash } from 'src/@core/utils/helper';
 import { ThrowBcUserException } from 'src/@core/common/exceptions/throw-bc-user-exceptions';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { BcUserResponseDto } from './dto/bc-user-response.dto';
@@ -44,8 +44,8 @@ export class BcUserService {
         // Hash Username
         const user = await client.getUserContext(keyHash, true);
         if (!user) {
-          logger.error('Invalid Key');
-          throw new Error('Invalid Key');
+          logger.error('Invalid Key or salt');
+          throw new Error('Invalid Key or salt');
         }
         logger.log('User found on the wallet');
       }
@@ -141,7 +141,7 @@ export class BcUserService {
 
   private generateKey(hashedData: string, salt?: string): string[] {
     if (!salt) {
-      salt = GenerateUniqueId();
+      salt = GenerateSHA1Hash(hashedData);
     }
     return [GenerateSHA256Hash(salt + hashedData + salt), salt];
   }
