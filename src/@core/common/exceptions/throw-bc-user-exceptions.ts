@@ -11,7 +11,7 @@ export const ThrowBcUserException = (err: Error) => {
     throw new ConflictException([err.message]);
   } else if (err.message.includes('not found')) {
     throw new NotFoundException([err.message]);
-  } else if (err.message.includes('Invalid Key')) {
+  } else if (err.message.includes('Invalid Key or salt')) {
     throw new UnauthorizedException([err.message]);
   } else {
     throw new InternalServerErrorException([err.message]);
