@@ -4,6 +4,7 @@ import { BcInvokeService } from '../blockchain/bc-invoke/bc-invoke.service';
 import { BcQueryService } from '../blockchain/bc-query/bc-query.service';
 import { StoreProjectDto } from './dto/store-project.dto';
 import { ProjectResponseDto } from './dto/project-response.dto';
+import { ProjectHistoryResponseDto } from './dto/project-history-response.dto';
 
 @Injectable()
 export class ProjectService {
@@ -105,7 +106,7 @@ export class ProjectService {
     orgName: string,
     channelName: string,
     salt,
-  ): Promise<ProjectResponseDto[]> {
+  ): Promise<ProjectHistoryResponseDto[]> {
     const chaincodeFunctionName = 'GetProjectHistory';
 
     const sDKRequestDto = new SDKRequestDto();
@@ -119,7 +120,7 @@ export class ProjectService {
       orgName,
       salt,
     );
-    return this.buildProjectResponseDtoList(response.args);
+    return this.buildProjectHistoryResponseDtoList(response.args);
   }
 
   private buildProjectResponseDto(args: any): ProjectResponseDto {
@@ -139,16 +140,34 @@ export class ProjectService {
     const projectResponseDtoList = [];
     for (const data of args) {
       const projectResponseDto = new ProjectResponseDto();
-      projectResponseDto.projectId = data.name == null ? null : data.id;
+      projectResponseDto.projectId = data.id == null ? null : data.id;
       projectResponseDto.name = data.name == null ? null : data.name;
-      projectResponseDto.detail = data.name == null ? null : data.detail;
-      projectResponseDto.domain = data.name == null ? null : data.domain;
-      projectResponseDto.members = data.name == null ? null : data.members;
-      projectResponseDto.entryUser = data.name == null ? null : data.entryUser;
+      projectResponseDto.detail = data.detail == null ? null : data.detail;
+      projectResponseDto.domain = data.domain == null ? null : data.domain;
+      projectResponseDto.members = data.members == null ? null : data.members;
+      projectResponseDto.entryUser =
+        data.entryUser == null ? null : data.entryUser;
       projectResponseDto.recordDate =
-        data.name == null ? null : data.recordDate;
+        data.recordDate == null ? null : data.recordDate;
       projectResponseDtoList.push(projectResponseDto);
     }
     return projectResponseDtoList;
+  }
+
+  private buildProjectHistoryResponseDtoList(
+    args: any,
+  ): ProjectHistoryResponseDto[] {
+    const projectHistoryResponseDtoList = [];
+    for (const data of args) {
+      const projectHistoryResponseDto = new ProjectHistoryResponseDto();
+
+      projectHistoryResponseDto.txId = data.txId;
+      projectHistoryResponseDto.isDeleted = data.isDeleted;
+      projectHistoryResponseDto.project = this.buildProjectResponseDto(
+        data.project,
+      );
+      projectHistoryResponseDtoList.push(projectHistoryResponseDto);
+    }
+    return projectHistoryResponseDtoList;
   }
 }
