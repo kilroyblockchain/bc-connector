@@ -16,8 +16,6 @@ export class StoreProjectVersionDto {
   @IsNotEmpty()
   logFileVersion: string;
 
-  @IsString()
-  @IsNotEmpty()
   logFileBCHash: string;
 
   @IsString()
@@ -32,16 +30,12 @@ export class StoreProjectVersionDto {
   @IsNotEmpty()
   testDataSets: string;
 
-  @IsString()
-  @IsNotEmpty()
   testDatasetBCHash: string;
 
   @IsString()
   @IsNotEmpty()
   trainDataSets: string;
 
-  @IsString()
-  @IsNotEmpty()
   trainDatasetBCHash: string;
 
   @IsString()
