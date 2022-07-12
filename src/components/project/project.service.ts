@@ -132,6 +132,8 @@ export class ProjectService {
       members: args.members == null ? null : args.members,
       entryUser: args.entryUser == null ? null : args.entryUser,
       recordDate: args.recordDate == null ? null : args.recordDate,
+      status: args.status == null ? null : args.status,
+      creatorMSP: args.creatorMSP == null ? null : args.creatorMSP,
     };
     return projectResponseDto;
   }

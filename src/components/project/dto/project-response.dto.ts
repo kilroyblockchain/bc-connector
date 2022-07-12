@@ -9,6 +9,10 @@ export class ProjectResponseDto {
 
   members: string[];
 
+  status: boolean;
+
+  creatorMSP: string;
+
   entryUser: string;
 
   recordDate: string;
