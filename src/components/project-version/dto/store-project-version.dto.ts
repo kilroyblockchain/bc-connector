@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 export class StoreProjectVersionDto {
   @IsString()
   @IsNotEmpty()
@@ -16,6 +16,8 @@ export class StoreProjectVersionDto {
   @IsNotEmpty()
   logFileVersion: string;
 
+  @IsString()
+  @IsOptional()
   logFileBCHash: string;
 
   @IsString()
@@ -30,12 +32,16 @@ export class StoreProjectVersionDto {
   @IsNotEmpty()
   testDataSets: string;
 
+  @IsString()
+  @IsOptional()
   testDatasetBCHash: string;
 
   @IsString()
   @IsNotEmpty()
   trainDataSets: string;
 
+  @IsString()
+  @IsOptional()
   trainDatasetBCHash: string;
 
   @IsString()
