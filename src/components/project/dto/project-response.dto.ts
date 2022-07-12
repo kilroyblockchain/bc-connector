@@ -1,3 +1,5 @@
+import { ProjectVersionProjectDto } from 'src/components/project-version/dto/project-version-project.dto';
+
 export class ProjectResponseDto {
   projectId: string;
 
@@ -16,4 +18,6 @@ export class ProjectResponseDto {
   entryUser: string;
 
   recordDate: string;
+
+  projectVersions: ProjectVersionProjectDto[];
 }
