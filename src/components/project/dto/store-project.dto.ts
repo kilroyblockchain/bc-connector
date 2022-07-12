@@ -1,4 +1,13 @@
-import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsArray,
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { ProjectVersionProjectDto } from 'src/components/project-version/dto/project-version-project.dto';
 export class StoreProjectDto {
   @IsString()
   @IsNotEmpty()
@@ -19,6 +28,15 @@ export class StoreProjectDto {
   @IsNotEmpty()
   @IsArray()
   members: string[];
+
+  @IsNotEmpty()
+  @IsBoolean()
+  status: boolean;
+
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => ProjectVersionProjectDto)
+  projectVersions: ProjectVersionProjectDto[];
 
   @IsOptional()
   @IsString()

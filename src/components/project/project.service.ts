@@ -134,26 +134,10 @@ export class ProjectService {
       recordDate: args.recordDate == null ? null : args.recordDate,
       status: args.status == null ? null : args.status,
       creatorMSP: args.creatorMSP == null ? null : args.creatorMSP,
+      projectVersions:
+        args.projectVersions == null ? null : args.projectVersions,
     };
     return projectResponseDto;
-  }
-
-  private buildProjectResponseDtoList(args: any): ProjectResponseDto[] {
-    const projectResponseDtoList = [];
-    for (const data of args) {
-      const projectResponseDto = new ProjectResponseDto();
-      projectResponseDto.projectId = data.id == null ? null : data.id;
-      projectResponseDto.name = data.name == null ? null : data.name;
-      projectResponseDto.detail = data.detail == null ? null : data.detail;
-      projectResponseDto.domain = data.domain == null ? null : data.domain;
-      projectResponseDto.members = data.members == null ? null : data.members;
-      projectResponseDto.entryUser =
-        data.entryUser == null ? null : data.entryUser;
-      projectResponseDto.recordDate =
-        data.recordDate == null ? null : data.recordDate;
-      projectResponseDtoList.push(projectResponseDto);
-    }
-    return projectResponseDtoList;
   }
 
   private buildProjectHistoryResponseDtoList(
