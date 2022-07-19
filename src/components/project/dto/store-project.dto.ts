@@ -7,7 +7,8 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-import { ProjectVersionProjectDto } from 'src/components/project-version/dto/project-version-project.dto';
+import { ModelVersionProjectDto } from 'src/components/model-version/dto/model-version-project.dto';
+
 export class StoreProjectDto {
   @IsString()
   @IsNotEmpty()
@@ -35,8 +36,8 @@ export class StoreProjectDto {
 
   @IsOptional()
   @ValidateNested({ each: true })
-  @Type(() => ProjectVersionProjectDto)
-  projectVersions: ProjectVersionProjectDto[];
+  @Type(() => ModelVersionProjectDto)
+  projectVersions: ModelVersionProjectDto[];
 
   @IsOptional()
   @IsString()

@@ -1,27 +1,25 @@
-export class ProjectVersionResponseDto {
+export class ModelVersionResponseDto {
   id: string;
 
   versionName: string;
 
   logFilePath: string;
 
-  logFileVersion: string;
-
   logFileBCHash: string;
-
-  versionModel: string;
 
   noteBookVersion: string;
 
-  testDataSets: string;
+  testDataSetsUrl: string;
 
   testDatasetBCHash: string;
 
-  trainDataSets: string;
+  trainDataSetsUrl: string;
 
   trainDatasetBCHash: string;
 
-  artifacts: string;
+  aiModelUrl: string;
+
+  aiModelBCHash: string;
 
   codeVersion: string;
 
@@ -38,4 +36,6 @@ export class ProjectVersionResponseDto {
   recordDate: string;
 
   entryUser: string;
+
+  creatorMSP: string;
 }

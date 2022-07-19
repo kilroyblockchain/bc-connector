@@ -12,24 +12,24 @@ import {
 import { AuthorizationGuard } from 'src/@core/auth/guards/authorization.guard';
 import { BlockchainStatusGuard } from 'src/@core/auth/guards/blockchain-status.guard';
 import { Response } from 'src/@core/common/dto/response.dto';
-import { StoreProjectVersionDto } from './dto/store-project-version.dto';
-import { ProjectVersionService } from './project-version.service';
+import { StoreModelVersionDto } from './dto/store-model-version.dto';
+import { ModelVersionService } from './model-version.service';
 
-@Controller('project-version')
-export class ProjectVersionController {
-  constructor(private readonly projectVersionService: ProjectVersionService) {}
+@Controller('model-version')
+export class ModelVersionController {
+  constructor(private readonly modelVersionService: ModelVersionService) {}
 
   @Post()
   @UseGuards(BlockchainStatusGuard, AuthorizationGuard)
   @HttpCode(HttpStatus.OK)
-  async storeProjectVersion(
-    @Body() storeProjectVersionDto: StoreProjectVersionDto,
+  async storeModelVersion(
+    @Body() storeModelVersionDto: StoreModelVersionDto,
     @Headers() header,
   ): Promise<Response> {
     return new Response(
       'Project Version Stored',
-      await this.projectVersionService.storeVersionProject(
-        storeProjectVersionDto,
+      await this.modelVersionService.storeVersionProject(
+        storeModelVersionDto,
         header.key,
         header.org_name,
         header.channel_name,
@@ -38,17 +38,17 @@ export class ProjectVersionController {
     ).setStatusCode(HttpStatus.OK);
   }
 
-  @Get(':projectVersionId')
+  @Get(':modelVersionId')
   @UseGuards(BlockchainStatusGuard, AuthorizationGuard)
   @HttpCode(HttpStatus.OK)
-  async getProjectVersion(
-    @Param('projectVersionId') projectVersionId: string,
+  async getModelVersion(
+    @Param('modelVersionId') modelVersionId: string,
     @Headers() header,
   ): Promise<Response> {
     return new Response(
       'Project Version Fetched',
-      await this.projectVersionService.getProjectVersion(
-        projectVersionId,
+      await this.modelVersionService.getModelVersion(
+        modelVersionId,
         header.key,
         header.org_name,
         header.channel_name,
@@ -57,17 +57,17 @@ export class ProjectVersionController {
     ).setStatusCode(HttpStatus.OK);
   }
 
-  @Get('history/:projectVersionId')
+  @Get('history/:modelVersionId')
   @UseGuards(BlockchainStatusGuard, AuthorizationGuard)
   @HttpCode(HttpStatus.OK)
-  async getProjectVersionHistory(
-    @Param('projectVersionId') projectVersionId: string,
+  async getModelVersionHistory(
+    @Param('modelVersionId') modelVersionId: string,
     @Headers() header,
   ): Promise<Response> {
     return new Response(
       'Project Version History Fetched',
-      await this.projectVersionService.getProjectVersionHistory(
-        projectVersionId,
+      await this.modelVersionService.getModelVersionHistory(
+        modelVersionId,
         header.key,
         header.org_name,
         header.channel_name,

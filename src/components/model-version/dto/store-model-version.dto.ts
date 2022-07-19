@@ -1,5 +1,13 @@
-import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-export class StoreProjectVersionDto {
+import { Type } from 'class-transformer';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { ProjectModelVersionDto } from './project-model-version.dto';
+export class StoreModelVersionDto {
   @IsString()
   @IsNotEmpty()
   id: string;
@@ -13,16 +21,8 @@ export class StoreProjectVersionDto {
   logFilePath: string;
 
   @IsString()
-  @IsNotEmpty()
-  logFileVersion: string;
-
-  @IsString()
   @IsOptional()
   logFileBCHash: string;
-
-  @IsString()
-  @IsNotEmpty()
-  versionModel: string;
 
   @IsString()
   @IsNotEmpty()
@@ -30,7 +30,7 @@ export class StoreProjectVersionDto {
 
   @IsString()
   @IsNotEmpty()
-  testDataSets: string;
+  testDataSetsUrl: string;
 
   @IsString()
   @IsOptional()
@@ -38,7 +38,7 @@ export class StoreProjectVersionDto {
 
   @IsString()
   @IsNotEmpty()
-  trainDataSets: string;
+  trainDataSetsUrl: string;
 
   @IsString()
   @IsOptional()
@@ -46,7 +46,11 @@ export class StoreProjectVersionDto {
 
   @IsString()
   @IsNotEmpty()
-  artifacts: string;
+  aiModelUrl: string;
+
+  @IsString()
+  @IsOptional()
+  aiModelBCHash: string;
 
   @IsString()
   @IsNotEmpty()
@@ -68,9 +72,9 @@ export class StoreProjectVersionDto {
   @IsNotEmpty()
   status: boolean;
 
-  @IsString()
-  @IsNotEmpty()
-  project: string;
+  @ValidateNested({ each: true })
+  @Type(() => ProjectModelVersionDto)
+  project: ProjectModelVersionDto[];
 
   @IsString()
   @IsNotEmpty()

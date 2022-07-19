@@ -134,8 +134,7 @@ export class ProjectService {
       recordDate: args.recordDate == null ? null : args.recordDate,
       status: args.status == null ? null : args.status,
       creatorMSP: args.creatorMSP == null ? null : args.creatorMSP,
-      projectVersions:
-        args.projectVersions == null ? null : args.projectVersions,
+      modelVersions: args.modelVersions == null ? null : args.modelVersions,
     };
     return projectResponseDto;
   }
@@ -146,7 +145,6 @@ export class ProjectService {
     const projectHistoryResponseDtoList = [];
     for (const data of args) {
       const projectHistoryResponseDto = new ProjectHistoryResponseDto();
-
       projectHistoryResponseDto.txId = data.txId;
       projectHistoryResponseDto.isDeleted = data.isDeleted;
       projectHistoryResponseDto.project = this.buildProjectResponseDto(
