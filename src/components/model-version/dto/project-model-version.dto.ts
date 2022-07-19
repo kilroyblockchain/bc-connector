@@ -1,11 +1,11 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class ProjectVersionProjectDto {
+export class ProjectModelVersionDto {
   @IsString()
   @IsNotEmpty()
   id: string;
 
   @IsString()
   @IsNotEmpty()
-  versionName: string;
+  projectName: string;
 }

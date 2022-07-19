@@ -2,23 +2,23 @@ import { Injectable } from '@nestjs/common';
 import { SDKRequestDto } from 'src/@core/common/dto/sdk-request.dto';
 import { BcInvokeService } from '../blockchain/bc-invoke/bc-invoke.service';
 import { BcQueryService } from '../blockchain/bc-query/bc-query.service';
-import { ProjectVersionResponseDto } from './dto/project-version-response.dto';
-import { StoreProjectVersionDto } from './dto/store-project-version.dto';
+import { ModelVersionResponseDto } from './dto/model-version-response.dto';
+import { StoreModelVersionDto } from './dto/store-model-version.dto';
 
 @Injectable()
-export class ProjectVersionService {
-  // Name of ProjectVersion Chaincode
-  private readonly CHAINCODE_NAME = 'project-version';
+export class ModelVersionService {
+  // Name of ModelVersion Chaincode
+  private readonly CHAINCODE_NAME = 'model-version';
   constructor(
     private readonly bcInvokeService: BcInvokeService,
     private readonly bcQueryService: BcQueryService,
   ) {}
 
   /**
-   * Create Project Version Function calls 'StoreProjectVersion' chaincode functions on chaincode 'project version' which creates new state if non and updates the existing state.
+   * Create Project Version Function calls 'StoreModelVersion' chaincode functions on chaincode 'model version' which creates new state if non and updates the existing state.
    *
    *
-   * @param {StoreProjectVersionDto} storeProjectVersionDto - Object of StoreProjectVersionDto
+   * @param {StoreModelVersionDto} storeModelVersionDto - Object of StoreModelVersionDto
    * @param {string} key - Key of the user to get the detail
    * @param {string} orgName - Name of the Organization to be used for transaction
    * @param {string} channelName - Name of the channel to send the transaction
@@ -28,18 +28,18 @@ export class ProjectVersionService {
    *
    **/
   async storeVersionProject(
-    storeProjectVersionDto: StoreProjectVersionDto,
+    storeModelVersionDto: StoreModelVersionDto,
     key: string,
     orgName: string,
     channelName: string,
     salt: string,
-  ): Promise<ProjectVersionResponseDto> {
-    const chaincodeFunctionName = 'StoreProjectVersion';
+  ): Promise<ModelVersionResponseDto> {
+    const chaincodeFunctionName = 'StoreModelVersion';
 
     const sDKRequestDto = new SDKRequestDto();
     sDKRequestDto.chaincodeName = this.CHAINCODE_NAME;
     sDKRequestDto.functionName = chaincodeFunctionName;
-    sDKRequestDto.args = [JSON.stringify(storeProjectVersionDto)];
+    sDKRequestDto.args = [JSON.stringify(storeModelVersionDto)];
     sDKRequestDto.channelName = channelName;
     const response = await this.bcInvokeService.invokeChaincode(
       sDKRequestDto,
@@ -47,35 +47,35 @@ export class ProjectVersionService {
       orgName,
       salt,
     );
-    return this.buildProjectVersionResponseDto(JSON.parse(response.args));
+    return this.buildModelVersionResponseDto(JSON.parse(response.args));
   }
 
   /**
-   * GetProject Function calls 'GetProject' chaincode functions on chaincode 'project version' which returns the project version current state on the basis of project version id
+   * GetProject Function calls 'GetProject' chaincode functions on chaincode 'model version' which returns the model version current state on the basis of model version id
    *
    *
-   * @param {string} projectVersionId - Id of the project version state to fetch
+   * @param {string} modelVersionId - Id of the model version state to fetch
    * @param {string} key - Key of the user to get the detail
    * @param {string} orgName - Name of the Organization to be used for transaction
    * @param {string} channelName - Name of the channel to send the transaction
    * @param {string} salt - Unique string associated with the key generated
-   * @returns {Promise<ProjectVersionResponseDto>} - Returns Promise of ProjectVersionResponseDto
+   * @returns {Promise<ModelVersionResponseDto>} - Returns Promise of ModelVersionResponseDto
    *
    *
    **/
-  async getProjectVersion(
-    projectVersionId: string,
+  async getModelVersion(
+    modelVersionId: string,
     key: string,
     orgName: string,
     channelName: string,
     salt,
-  ): Promise<ProjectVersionResponseDto> {
-    const chaincodeFunctionName = 'GetProjectVersion';
+  ): Promise<ModelVersionResponseDto> {
+    const chaincodeFunctionName = 'GetModelVersion';
 
     const sDKRequestDto = new SDKRequestDto();
     sDKRequestDto.chaincodeName = this.CHAINCODE_NAME;
     sDKRequestDto.functionName = chaincodeFunctionName;
-    sDKRequestDto.args = [projectVersionId];
+    sDKRequestDto.args = [modelVersionId];
     sDKRequestDto.channelName = channelName;
     const response = await this.bcQueryService.queryChaincode(
       sDKRequestDto,
@@ -83,35 +83,35 @@ export class ProjectVersionService {
       orgName,
       salt,
     );
-    return this.buildProjectVersionResponseDto(response.args);
+    return this.buildModelVersionResponseDto(response.args);
   }
 
   /**
-   * GetProjectHistory Function calls 'GetProjectHistory' chaincode functions on chaincode 'project version' which returns all the state of project version stored on the basis of project version id
+   * GetProjectHistory Function calls 'GetProjectHistory' chaincode functions on chaincode 'model version' which returns all the state of model version stored on the basis of model version id
    *
    *
-   * @param {string} projectVersionId - Id of the project version state to fetch
+   * @param {string} modelVersionId - Id of the model version state to fetch
    * @param {string} key - Key of the user to get the detail
    * @param {string} orgName - Name of the Organization to be used for transaction
    * @param {string} channelName - Name of the channel to send the transaction
    * @param {string} salt - Unique string associated with the key generated
-   * @returns {Promise<ProjectVersionResponseDto>} - Returns Promise of ProjectVersionResponseDto
+   * @returns {Promise<ModelVersionResponseDto>} - Returns Promise of ModelVersionResponseDto
    *
    *
    **/
-  async getProjectVersionHistory(
-    projectVersionId: string,
+  async getModelVersionHistory(
+    modelVersionId: string,
     key: string,
     orgName: string,
     channelName: string,
     salt,
-  ): Promise<ProjectVersionResponseDto[]> {
-    const chaincodeFunctionName = 'GetProjectVersionHistory';
+  ): Promise<ModelVersionResponseDto[]> {
+    const chaincodeFunctionName = 'GetModelVersionHistory';
 
     const sDKRequestDto = new SDKRequestDto();
     sDKRequestDto.chaincodeName = this.CHAINCODE_NAME;
     sDKRequestDto.functionName = chaincodeFunctionName;
-    sDKRequestDto.args = [projectVersionId];
+    sDKRequestDto.args = [modelVersionId];
     sDKRequestDto.channelName = channelName;
     const response = await this.bcQueryService.queryChaincode(
       sDKRequestDto,
@@ -119,44 +119,43 @@ export class ProjectVersionService {
       orgName,
       salt,
     );
-    return this.buildProjectVersionResponseDtoList(response.args);
+    return this.buildModelVersionResponseDtoList(response.args);
   }
 
   /**
    * *******************PRIVATE FUNCTION*******************
-   * BuildProjectVersionResponseDto Sync Function typecasts args of type any to ProjectVersionResponseDto
+   * BuildModelVersionResponseDto Sync Function typecasts args of type any to ModelVersionResponseDto
    *
    *
    * @param {any} args - args response from chaincode.
-   * @returns {ProjectVersionResponseDto} - Returns ProjectVersionResponseDto
+   * @returns {ModelVersionResponseDto} - Returns ModelVersionResponseDto
    *
    *
    **/
-  private buildProjectVersionResponseDto(args: any): ProjectVersionResponseDto {
-    const projectVersionResponseDto: ProjectVersionResponseDto = args;
-    projectVersionResponseDto.recordDate = args.recordDate;
-    return projectVersionResponseDto;
+  private buildModelVersionResponseDto(args: any): ModelVersionResponseDto {
+    const modelVersionResponseDto: ModelVersionResponseDto = args;
+    modelVersionResponseDto.recordDate = args.recordDate;
+    return modelVersionResponseDto;
   }
 
   /**
    * *******************PRIVATE FUNCTION*******************
-   * BuildProjectVersionResponseDtoList Sync Function typecasts args of type any to ProjectVersionResponseDto List
+   * BuildModelVersionResponseDtoList Sync Function typecasts args of type any to ModelVersionResponseDto List
    *
    *
    * @param {any} args - args response from chaincode
-   * @returns {ProjectVersionResponseDto[]} - Returns ProjectVersionResponseDto List
+   * @returns {ModelVersionResponseDto[]} - Returns ModelVersionResponseDto List
    *
    *
    **/
-  private buildProjectVersionResponseDtoList(
+  private buildModelVersionResponseDtoList(
     args: any,
-  ): ProjectVersionResponseDto[] {
-    const projectVersionResponseDtoList = [];
+  ): ModelVersionResponseDto[] {
+    const modelVersionResponseDtoList = [];
     for (const data of args) {
-      const projectVersionResponseDto =
-        this.buildProjectVersionResponseDto(data);
-      projectVersionResponseDtoList.push(projectVersionResponseDto);
+      const modelVersionResponseDto = this.buildModelVersionResponseDto(data);
+      modelVersionResponseDtoList.push(modelVersionResponseDto);
     }
-    return projectVersionResponseDtoList;
+    return modelVersionResponseDtoList;
   }
 }

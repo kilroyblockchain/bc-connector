@@ -1,4 +1,4 @@
-import { ProjectVersionProjectDto } from 'src/components/project-version/dto/project-version-project.dto';
+import { ModelVersionProjectDto } from 'src/components/model-version/dto/model-version-project.dto';
 
 export class ProjectResponseDto {
   projectId: string;
@@ -19,5 +19,5 @@ export class ProjectResponseDto {
 
   recordDate: string;
 
-  projectVersions: ProjectVersionProjectDto[];
+  modelVersions: ModelVersionProjectDto[];
 }
