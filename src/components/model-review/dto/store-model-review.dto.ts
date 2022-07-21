@@ -35,6 +35,7 @@ export class StoreModelReviewDto {
   productionURL: string;
 
   @IsArray()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => ReviewDocument)
   reviewDocuments: ReviewDocument[];
