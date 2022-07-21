@@ -1,11 +1,21 @@
 import { Type } from 'class-transformer';
 import {
+  IsArray,
   IsNotEmpty,
   IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
 import { EntryUserDetailDto } from './entry-user-detail.dto';
+
+export class ReviewDocument {
+  @IsString()
+  @IsNotEmpty()
+  docUrl: string;
+  @IsString()
+  @IsNotEmpty()
+  docName: string;
+}
 
 export class StoreModelReviewDto {
   @IsString()
@@ -24,9 +34,10 @@ export class StoreModelReviewDto {
   @IsOptional()
   productionURL: string;
 
-  @IsString()
-  @IsOptional()
-  reviewSupportingDocument: string;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ReviewDocument)
+  reviewDocuments: ReviewDocument[];
 
   @IsString()
   @IsNotEmpty()
