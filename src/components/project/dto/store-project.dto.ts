@@ -35,9 +35,10 @@ export class StoreProjectDto {
   status: boolean;
 
   @IsOptional()
+  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ModelVersionProjectDto)
-  projectVersions: ModelVersionProjectDto[];
+  modelVersions: ModelVersionProjectDto[];
 
   @IsOptional()
   @IsString()
