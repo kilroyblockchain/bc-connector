@@ -52,6 +52,10 @@ export class StoreModelReviewDto {
   @IsOptional()
   comment: string;
 
+  @IsString()
+  @IsOptional()
+  reviewedModelVersionId: string;
+
   @ValidateNested({ each: true })
   @Type(() => EntryUserDetailDto)
   entryUserDetail: EntryUserDetailDto;

@@ -17,6 +17,8 @@ export class ModelReviewResponseDto {
 
   comment: string;
 
+  reviewedModelVersionId: string;
+
   recordDate: string;
 
   entryUserDetail: EntryUserDetailDto;
