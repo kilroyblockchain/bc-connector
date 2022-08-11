@@ -37,7 +37,7 @@ export class StoreModelVersionDto {
   testDatasetBCHash: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   trainDataSetsUrl: string;
 
   @IsString()
@@ -45,7 +45,7 @@ export class StoreModelVersionDto {
   trainDatasetBCHash: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   aiModelUrl: string;
 
   @IsString()
