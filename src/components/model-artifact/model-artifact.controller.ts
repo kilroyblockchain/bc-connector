@@ -10,27 +10,25 @@ import {
 import { AuthorizationGuard } from 'src/@core/auth/guards/authorization.guard';
 import { BlockchainStatusGuard } from 'src/@core/auth/guards/blockchain-status.guard';
 import { Response } from 'src/@core/common/dto/response.dto';
-import { GetModelExperimentDto } from './dto/get-model-experiment.dto';
-import { StoreModelExperimentDto } from './dto/store-model-experiment.dto';
-import { ModelExperimentService } from './model-experiment.service';
+import { GetModelArtifactDto } from './dto/get-model-artifact.dto';
+import { StoreModelArtifactDto } from './dto/store-model-artifact.dto';
+import { ModelArtifactService } from './model-artifact.service';
 
-@Controller('model-experiment')
-export class ModelExperimentController {
-  constructor(
-    private readonly modelExperimentService: ModelExperimentService,
-  ) {}
+@Controller('model-artifact')
+export class ModelArtifactController {
+  constructor(private readonly modelArtifactService: ModelArtifactService) {}
 
   @Post()
   @UseGuards(BlockchainStatusGuard, AuthorizationGuard)
   @HttpCode(HttpStatus.OK)
-  async storeModelExperiment(
-    @Body() storeModelExperimentDto: StoreModelExperimentDto,
+  async storeModelArtifact(
+    @Body() storeModelArtifactDto: StoreModelArtifactDto,
     @Headers() header,
   ): Promise<Response> {
     return new Response(
-      'Model Experiment Stored',
-      await this.modelExperimentService.storeModelExperiment(
-        storeModelExperimentDto,
+      'Model Artifact Stored',
+      await this.modelArtifactService.storeModelArtifact(
+        storeModelArtifactDto,
         header.key,
         header.org_name,
         header.channel_name,
@@ -42,14 +40,14 @@ export class ModelExperimentController {
   @Post('/get')
   @UseGuards(BlockchainStatusGuard, AuthorizationGuard)
   @HttpCode(HttpStatus.OK)
-  async getModelExperiment(
-    @Body() getModelExperimentDto: GetModelExperimentDto,
+  async getModelArtifact(
+    @Body() getModelArtifactDto: GetModelArtifactDto,
     @Headers() header,
   ): Promise<Response> {
     return new Response(
-      'Model Experiment Fetched',
-      await this.modelExperimentService.getModelExperiment(
-        getModelExperimentDto,
+      'Model Artifact Fetched',
+      await this.modelArtifactService.getModelArtifact(
+        getModelArtifactDto,
         header.key,
         header.org_name,
         header.channel_name,
@@ -61,14 +59,14 @@ export class ModelExperimentController {
   @Post('history')
   @UseGuards(BlockchainStatusGuard, AuthorizationGuard)
   @HttpCode(HttpStatus.OK)
-  async getModelExperimentHistory(
-    @Body() getModelExperimentDto: GetModelExperimentDto,
+  async getModelArtifactHistory(
+    @Body() getModelArtifactDto: GetModelArtifactDto,
     @Headers() header,
   ): Promise<Response> {
     return new Response(
-      'Model Experiment History Fetched',
-      await this.modelExperimentService.getModelExperimentHistory(
-        getModelExperimentDto,
+      'Model Artifact History Fetched',
+      await this.modelArtifactService.getModelArtifactHistory(
+        getModelArtifactDto,
         header.key,
         header.org_name,
         header.channel_name,
