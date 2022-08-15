@@ -16,7 +16,7 @@ export class ModelExperimentService {
   ) {}
 
   /**
-   * Create Project Version Function calls 'StoreModelExperiment' chaincode functions on chaincode 'model version' which creates new state if non and updates the existing state.
+   * StoreModelExperiment Function calls 'StoreModelExperiment' chaincode functions on model-experiment chaincode which creates new state if non and updates the existing state.
    *
    *
    * @param {StoreModelExperimentDto} storeModelExperimentDto - Object of StoreModelExperimentDto
@@ -24,11 +24,11 @@ export class ModelExperimentService {
    * @param {string} orgName - Name of the Organization to be used for transaction
    * @param {string} channelName - Name of the channel to send the transaction
    * @param {string} salt - Unique string associated with the key generated
-   * @returns {Promise<ProjectResponseDto>} - Returns Promise of ProjectResponseDto
+   * @returns {Promise<ModelExperimentResponseDto>} - Returns Promise of ModelExperimentResponseDto
    *
    *
    **/
-  async storeVersionProject(
+  async storeModelExperiment(
     storeModelExperimentDto: StoreModelExperimentDto,
     key: string,
     orgName: string,
@@ -52,10 +52,10 @@ export class ModelExperimentService {
   }
 
   /**
-   * GetProject Function calls 'GetProject' chaincode functions on chaincode 'model version' which returns the model version current state on the basis of model version id
+   * GetModelExperiment Function calls 'GetModelExperiment' chaincode functions on model-experiment chaincode which returns the model experiment's current state on the basis of GetModelExperimentDto.
    *
    *
-   * @param {string} modelExperimentId - Id of the model version state to fetch
+   * @param {GetModelExperimentDto} getModelExperimentDto - Object of GetModelExperimentDto
    * @param {string} key - Key of the user to get the detail
    * @param {string} orgName - Name of the Organization to be used for transaction
    * @param {string} channelName - Name of the channel to send the transaction
@@ -88,10 +88,10 @@ export class ModelExperimentService {
   }
 
   /**
-   * GetProjectHistory Function calls 'GetProjectHistory' chaincode functions on chaincode 'model version' which returns all the state of model version stored on the basis of model version id
+   * GetModelExperimentHistory Function calls 'GetModelExperimentHistory' chaincode functions on model-experiment chaincode which returns all the state of model experiment stored on the basis of GetModelExperimentDto.
    *
    *
-   * @param {string} modelExperimentId - Id of the model version state to fetch
+   * @param {GetModelExperimentDto} getModelExperimentDto - Object of GetModelExperimentDto
    * @param {string} key - Key of the user to get the detail
    * @param {string} orgName - Name of the Organization to be used for transaction
    * @param {string} channelName - Name of the channel to send the transaction

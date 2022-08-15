@@ -27,7 +27,7 @@ export class ModelArtifactController {
   ): Promise<Response> {
     return new Response(
       'Model Artifact Stored',
-      await this.modelArtifactService.storeVersionProject(
+      await this.modelArtifactService.storeModelArtifact(
         storeModelArtifactDto,
         header.key,
         header.org_name,

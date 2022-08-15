@@ -16,7 +16,7 @@ export class ModelArtifactService {
   ) {}
 
   /**
-   * Create Project Version Function calls 'StoreModelArtifact' chaincode functions on chaincode 'model version' which creates new state if non and updates the existing state.
+   * Store Model Artifact Function calls 'StoreModelArtifact' chaincode functions on chaincode which creates new state if non and updates the existing state.
    *
    *
    * @param {StoreModelArtifactDto} storeModelArtifactDto - Object of StoreModelArtifactDto
@@ -24,11 +24,11 @@ export class ModelArtifactService {
    * @param {string} orgName - Name of the Organization to be used for transaction
    * @param {string} channelName - Name of the channel to send the transaction
    * @param {string} salt - Unique string associated with the key generated
-   * @returns {Promise<ProjectResponseDto>} - Returns Promise of ProjectResponseDto
+   * @returns {Promise<ModelArtifactResponseDto>} - Returns Promise of ModelArtifactResponseDto
    *
    *
    **/
-  async storeVersionProject(
+  async storeModelArtifact(
     storeModelArtifactDto: StoreModelArtifactDto,
     key: string,
     orgName: string,
@@ -52,10 +52,10 @@ export class ModelArtifactService {
   }
 
   /**
-   * GetProject Function calls 'GetProject' chaincode functions on chaincode 'model version' which returns the model version current state on the basis of model version id
+   * GetModelArtifact Function calls 'GetModelArtifact' chaincode functions on chaincode which returns the model artifact's current state on the basis of GetModelArtifactDto
    *
    *
-   * @param {string} modelArtifactId - Id of the model version state to fetch
+   * @param {GetModelArtifactDto} getModelArtifactDto - Object of GetModelArtifactDto
    * @param {string} key - Key of the user to get the detail
    * @param {string} orgName - Name of the Organization to be used for transaction
    * @param {string} channelName - Name of the channel to send the transaction
@@ -88,10 +88,10 @@ export class ModelArtifactService {
   }
 
   /**
-   * GetProjectHistory Function calls 'GetProjectHistory' chaincode functions on chaincode 'model version' which returns all the state of model version stored on the basis of model version id
+   * GetModelArtifactHistory Function calls 'GetModelArtifactHistory' chaincode functions on 'model-artifact' chaincode which returns all the state of model artifact stored on the basis of GetModelArtifactDto
    *
    *
-   * @param {string} modelArtifactId - Id of the model version state to fetch
+   * @param {GetModelArtifactDto} getModelArtifactDto - Object of GetModelArtifactDto
    * @param {string} key - Key of the user to get the detail
    * @param {string} orgName - Name of the Organization to be used for transaction
    * @param {string} channelName - Name of the channel to send the transaction

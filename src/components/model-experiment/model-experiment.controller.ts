@@ -29,7 +29,7 @@ export class ModelExperimentController {
   ): Promise<Response> {
     return new Response(
       'Model Experiment Stored',
-      await this.modelExperimentService.storeVersionProject(
+      await this.modelExperimentService.storeModelExperiment(
         storeModelExperimentDto,
         header.key,
         header.org_name,
