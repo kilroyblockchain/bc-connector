@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   dev:
-    container_name: bta_bc_connector_dev
-    image: bta-bc-connector-dev:1.0.0
+    container_name: ${BTA_BC_CONNECTOR_NAME}_dev
+    image: ${BTA_BC_CONNECTOR_IMAGE}-dev:1.0.0
     build:
       context: .
       target: development
@@ -19,8 +19,8 @@ services:
     restart: unless-stopped
 
   prod:
-    container_name: bta_bc_connector_prod
-    image: bta-bc-connector-prod:1.0.0
+    container_name: ${BTA_BC_CONNECTOR_NAME}_prod
+    image: ${BTA_BC_CONNECTOR_IMAGE}-prod:1.0.0
     build:
       context: .
       target: production
