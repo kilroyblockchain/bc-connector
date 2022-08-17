@@ -16,4 +16,11 @@ export class ConnectionController {
   async checkConnection(): Promise<Response> {
     return new Response('OK', true).setStatusCode(HttpStatus.OK);
   }
+
+  @Get('check-authentication')
+  @UseGuards(AuthorizationGuard, AuthorizationGuard)
+  @HttpCode(HttpStatus.OK)
+  async checkAuthentication(): Promise<Response> {
+    return new Response('OK', true).setStatusCode(HttpStatus.OK);
+  }
 }
