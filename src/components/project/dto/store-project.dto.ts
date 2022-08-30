@@ -9,6 +9,18 @@ import {
 } from 'class-validator';
 import { ModelVersionProjectDto } from 'src/components/model-version/dto/model-version-project.dto';
 
+export class PurposeDetail {
+  @IsString()
+  @IsNotEmpty()
+  purpose: string;
+  @IsString()
+  @IsOptional()
+  docUrl: string;
+  @IsString()
+  @IsOptional()
+  docName: string;
+}
+
 export class StoreProjectDto {
   @IsString()
   @IsNotEmpty()
@@ -19,11 +31,11 @@ export class StoreProjectDto {
   name: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   detail: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   domain: string;
 
   @IsNotEmpty()
@@ -41,6 +53,16 @@ export class StoreProjectDto {
   modelVersions: ModelVersionProjectDto[];
 
   @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => PurposeDetail)
+  @IsNotEmpty()
+  purposeDetail: PurposeDetail;
+
+  @IsOptional()
   @IsString()
   entryUser: string;
+
+  @IsOptional()
+  @IsString()
+  createdBy: string;
 }
