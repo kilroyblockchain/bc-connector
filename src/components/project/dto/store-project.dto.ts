@@ -11,7 +11,7 @@ import { ModelVersionProjectDto } from 'src/components/model-version/dto/model-v
 
 export class PurposeDetail {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   purpose: string;
   @IsString()
   @IsOptional()
@@ -53,9 +53,7 @@ export class StoreProjectDto {
   modelVersions: ModelVersionProjectDto[];
 
   @IsOptional()
-  @ValidateNested({ each: true })
   @Type(() => PurposeDetail)
-  @IsNotEmpty()
   purposeDetail: PurposeDetail;
 
   @IsOptional()
