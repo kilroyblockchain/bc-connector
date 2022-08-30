@@ -1,4 +1,5 @@
 import { ModelVersionProjectDto } from 'src/components/model-version/dto/model-version-project.dto';
+import { PurposeDetail } from './store-project.dto';
 
 export class ProjectResponseDto {
   projectId: string;
@@ -20,4 +21,8 @@ export class ProjectResponseDto {
   recordDate: string;
 
   modelVersions: ModelVersionProjectDto[];
+
+  purposeDetail: PurposeDetail;
+
+  createdBy: string;
 }

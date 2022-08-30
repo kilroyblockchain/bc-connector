@@ -135,6 +135,8 @@ export class ProjectService {
       status: args.status == null ? null : args.status,
       creatorMSP: args.creatorMSP == null ? null : args.creatorMSP,
       modelVersions: args.modelVersions == null ? null : args.modelVersions,
+      purposeDetail: args.purposeDetail == null ? null : args.purposeDetail,
+      createdBy: args.createdBy == null ? null : args.createdBy,
     };
     return projectResponseDto;
   }
