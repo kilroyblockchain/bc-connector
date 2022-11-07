@@ -27,6 +27,12 @@ export class AuthorizationGuard implements CanActivate {
         'Need full authentication to access the resource',
       ]);
     }
+    if (headers.org_name !== process.env.ORG_NAME) {
+      logger.error('Org Name does not match');
+      throw new ForbiddenException([
+        'Need full authentication to access the resource',
+      ]);
+    }
     return headers;
   }
 }
