@@ -1,0 +1,14 @@
+CONNECTION_FILE_PATH=src/blockchain-files/connection-profile/
+ICA_CONTAINER_NAME=ica.o2-admin.bta.kilroy
+CA_ADMIN_ID=ica-o2-admin-bta-kilroy
+CA_ADMIN_PWD=Ica-O2-Admin-Bta-Kilroy
+CA_MSP_ID=PeerO2AdminBtaKilroyMSP
+ORG_NAME=PeerO2AdminBtaKilroy
+CERTIFICATE_TYPE=X.509
+PEER_NAMES=["peer0.o2-admin.bta.kilroy"]
+APP_PORT=5005
+AUTHORIZATION_TOKEN=aWNhLW8yLWFkbWluLWJ0YS1raWxyb3k6SWNhLU8yLUFkbWluLUJ0YS1LaWxyb3k=
+ADMIN_ID=08db14a1076cd3dd43e99220f53a62635ba0502e3a7d1f89b4e90316ab558330
+
+BTA_BC_CONNECTOR_NAME=bta_bc_connector_o2_admin
+BTA_BC_CONNECTOR_IMAGE=bta-bc-connector-o2-admin
