@@ -1,0 +1,152 @@
+# The network connection profile provides client applications the information about the target
+# blockchain network that are necessary for the applications to interact with it. These are all
+# knowledge that must be acquired from out-of-band sources. This file provides such a source.
+#
+name: 'bta-bc-network'
+
+#
+# Describe what the target network is/does.
+#
+description: 'BTA Blockchain'
+
+#
+# Schema version of the content. Used by the SDK to apply the corresponding parsing rules.
+#
+version: '1.0'
+
+#
+# The client section will be added on a per org basis see org1.yaml and org2.yaml
+#
+#client:
+
+#
+# [Optional]. But most apps would have this section so that channel objects can be constructed
+# based on the content below. If an app is creating channels, then it likely will not need this
+# section.
+#
+channels:
+  # name of the channel
+  c1-channel:
+    orderers:
+      - orderer0.org.bta.kilroy
+      - orderer1.org.bta.kilroy
+      - orderer2.org.bta.kilroy
+
+    peers:
+      peer0.o4-mlops.bta.kilroy:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+#
+# list of participating organizations in this network
+#
+organizations:
+  PeerO4MLOpsBtaKilroy:
+    mspid: PeerO4MLOpsBtaKilroyMSP
+    peers:
+      - peer0.o4-mlops.bta.kilroy
+
+    # [Optional]. Certificate Authorities issue certificates for identification purposes in a Fabric based
+    # network. Typically certificates provisioning is done in a separate process outside of the
+    # runtime network. Fabric-CA is a special certificate authority that provides a REST APIs for
+    # dynamic certificate management (enroll, revoke, re-enroll). The following section is only for
+    # Fabric-CA servers.
+    certificateAuthorities:
+      - ica.o4-mlops.bta.kilroy # container name ca-org1
+
+    adminPrivateKey:
+      path: src/blockchain-files/crypto-files/ica-o4-mlops-bta-kilroy/msp/keystore/key.pem
+    signedCert:
+      path: src/blockchain-files/crypto-files/ica-o4-mlops-bta-kilroy/msp/signcerts/cert.pem
+
+# List of orderers to send transaction and channel create/update requests to. For the time
+# being only one orderer is needed. If more than one is defined, which one get used by the
+# SDK is implementation specific. Consult each SDK's documentation for its handling of orderers.
+#
+orderers:
+  orderer0.org.bta.kilroy:
+    url: grpcs://BLOCKCHAIN_NETWORK_IP_ADDRESS:7050
+    # these are standard properties defined by the gRPC library
+    # they will be passed in as-is to gRPC client constructor
+    grpcOptions:
+      ssl-target-name-override: orderer0.org.bta.kilroy
+    tlsCACerts:
+      path: ../crypto-files/ordererOrganizations/orderer.org.bta.kilroy/orderers/orderer0.org.bta.kilroy/tls/tlscacerts/tls-localhost-7054.pem
+
+  orderer1.org.bta.kilroy:
+    url: grpcs://BLOCKCHAIN_NETWORK_IP_ADDRESS:8050
+    # these are standard properties defined by the gRPC library
+    # they will be passed in as-is to gRPC client constructor
+    grpcOptions:
+      ssl-target-name-override: orderer1.org.bta.kilroy
+    tlsCACerts:
+      path: ../crypto-files/ordererOrganizations/orderer.org.bta.kilroy/orderers/orderer1.org.bta.kilroy/tls/tlscacerts/tls-localhost-7054.pem
+
+  orderer2.org.bta.kilroy:
+    url: grpcs://BLOCKCHAIN_NETWORK_IP_ADDRESS:9050
+    # these are standard properties defined by the gRPC library
+    # they will be passed in as-is to gRPC client constructor
+    grpcOptions:
+      ssl-target-name-override: orderer2.org.bta.kilroy
+    tlsCACerts:
+      path: ../crypto-files/ordererOrganizations/orderer.org.bta.kilroy/orderers/orderer2.org.bta.kilroy/tls/tlscacerts/tls-localhost-7054.pem
+
+# List of peers to send various requests to, including endorsement, query
+# and event listener registration.
+#
+peers:
+  peer0.o4-mlops.bta.kilroy:
+    # this URL is used to send endorsement and query requests
+    url: grpcs://BLOCKCHAIN_NETWORK_IP_ADDRESS:7081
+    grpcOptions:
+      ssl-target-name-override: peer0.o4-mlops.bta.kilroy
+      request-timeout: 120001
+    tlsCACerts:
+      path: ../crypto-files/peerOrganizations/peer.o4-mlops.bta.kilroy/peers/peer0.o4-mlops.bta.kilroy/tls/tlscacerts/tls-localhost-7054.pem
+#
+# Fabric-CA is a special kind of Certificate Authority provided by Hyperledger Fabric which allows
+# certificate management to be done via REST APIs. Application may choose to use a standard
+# Certificate Authority instead of Fabric-CA, in which case this section would not be specified.
+#
+client:
+  # Which organization does this application instance belong to? The value must be the name of an org
+  # defined under "organizations"
+  organization: PeerO4MLOpsBtaKilroy
+
+  # Some SDKs support pluggable KV stores, the properties under "credentialStore"
+  # are implementation specific
+  credentialStore:
+    # [Optional]. Specific to FileKeyValueStore.js or similar implementations in other SDKs. Can be others
+    # if using an alternative impl. For instance, CouchDBKeyValueStore.js would require an object
+    # here for properties like url, db name, etc.
+    path: 'src/blockchain-files/wallet'
+
+    # [Optional]. Specific to the CryptoSuite implementation. Software-based implementations like
+    # CryptoSuite_ECDSA_AES.js in node SDK requires a key store. PKCS#11 based implementations does
+    # not.
+    cryptoStore:
+      # Specific to the underlying KeyValueStore that backs the crypto key store.
+      path: 'src/blockchain-files/wallet/cryptoFiles'
+
+    # [Optional]. Specific to Composer environment
+    # wallet: wallet-name
+
+certificateAuthorities:
+  ica.o4-mlops.bta.kilroy: # ca-org1
+    url: https://BLOCKCHAIN_NETWORK_IP_ADDRESS:7084
+    # the properties specified under this object are passed to the 'http' client verbatim when
+    # making the request to the Fabric-CA server
+    httpOptions:
+      verify: false
+    tlsCACerts:
+      path: ../crypto-files/ica-o4-mlops-bta-kilroy/msp/cacerts/localhost-7056.pem
+
+    # Fabric-CA supports dynamic user enrollment via REST APIs. A "root" user, a.k.a registrar, is
+    # needed to enroll and invoke new users.
+    # registrar:
+    #   - enrollId: test
+    #     enrollSecret: testpw
+    # [Optional] The optional name of the CA.
+    caName: ica.o4-mlops.bta.kilroy
