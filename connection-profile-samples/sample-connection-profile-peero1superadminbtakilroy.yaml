@@ -57,9 +57,9 @@ organizations:
       - ica.o1-super-admin.bta.kilroy # container name ca-org1
 
     adminPrivateKey:
-      path: src/blockchain-files/crypto-files/ica.o1-super-admin.bta.kilroy/msp/keystore/key.pem
+      path: src/blockchain-files/crypto-files/ica-o1-super-admin-bta-kilroy/msp/keystore/key.pem
     signedCert:
-      path: src/blockchain-files/crypto-files/ica.o1-super-admin.bta.kilroy/msp/signcerts/cert.pem
+      path: src/blockchain-files/crypto-files/ica-o1-super-admin-bta-kilroy/msp/signcerts/cert.pem
 
 # List of orderers to send transaction and channel create/update requests to. For the time
 # being only one orderer is needed. If more than one is defined, which one get used by the
