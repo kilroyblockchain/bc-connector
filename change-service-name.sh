@@ -16,5 +16,3 @@ else
     sed -i "s/PROD_SERVICE_NAME/${PROD_SERVICE_NAME}/g" "./docker-compose.yaml"
 fi
 
-
-docker compose up -d $DEV_SERVICE_NAME
