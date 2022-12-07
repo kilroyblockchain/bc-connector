@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  bta-super-admin-dev:
+  DEV_SERVICE_NAME:
     container_name: ${BTA_BC_CONNECTOR_NAME}
     image: ${BTA_BC_CONNECTOR_IMAGE}-dev:1.0.0
     build:
@@ -17,7 +17,7 @@ services:
       - /usr/src/app/node_modules
     restart: unless-stopped
 
-  bta-super-admin-prod:
+  PROD_SERVICE_NAME:
     container_name: ${BTA_BC_CONNECTOR_NAME}_prod
     image: ${BTA_BC_CONNECTOR_IMAGE}-prod:1.0.0
     build:
