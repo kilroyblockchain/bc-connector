@@ -1,3 +1,4 @@
+COMPOSE_PROJECT_NAME=kilroy 
 CONNECTION_FILE_PATH=src/blockchain-files/connection-profile/
 ICA_CONTAINER_NAME=ica.o4-mlops.bta.kilroy
 CA_ADMIN_ID=ica-o4-mlops-bta-kilroy
@@ -12,3 +13,6 @@ ADMIN_ID=08db14a1076cd3dd43e99220f53a62635ba0502e3a7d1f89b4e90316ab558330
 
 BTA_BC_CONNECTOR_NAME=bta_bc_connector_o4_mlops
 BTA_BC_CONNECTOR_IMAGE=bta-bc-connector-o4-mlops
+
+DEV_SERVICE_NAME=bta-mlops-dev
+PROD_SERVICE_NAME=bta-mlops-prod

@@ -1,8 +1,7 @@
 version: '3.8'
-
 services:
-  dev:
-    container_name: ${BTA_BC_CONNECTOR_NAME}_dev
+  DEV_SERVICE_NAME:
+    container_name: ${BTA_BC_CONNECTOR_NAME}
     image: ${BTA_BC_CONNECTOR_IMAGE}-dev:1.0.0
     build:
       context: .
@@ -12,13 +11,13 @@ services:
     ports:
       - ${APP_PORT}:3000
     networks:
-      - bta-bc-network
+      - bta-network
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     restart: unless-stopped
 
-  prod:
+  PROD_SERVICE_NAME:
     container_name: ${BTA_BC_CONNECTOR_NAME}_prod
     image: ${BTA_BC_CONNECTOR_IMAGE}-prod:1.0.0
     build:
@@ -29,7 +28,7 @@ services:
     ports:
       - ${APP_PORT}:3000
     networks:
-      - bta-bc-network
+      - bta-network
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -37,4 +36,4 @@ services:
     restart: unless-stopped
 
 networks:
-  bta-bc-network:
+  bta-network:
