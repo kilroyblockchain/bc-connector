@@ -80,7 +80,7 @@ organizations:
 #
 orderers:
   orderer0.org.bta.kilroy:
-    url: grpcs://BLOCKCHAIN_NETWORK_IP_ADDRESS:7050
+    url: grpcs://orderer0.org.bta.kilroy:7050
     # these are standard properties defined by the gRPC library
     # they will be passed in as-is to gRPC client constructor
     grpcOptions:
@@ -89,7 +89,7 @@ orderers:
       path: ../crypto-files/ordererOrganizations/orderer.org.bta.kilroy/orderers/orderer0.org.bta.kilroy/tls/tlscacerts/tls-localhost-7054.pem
 
   orderer1.org.bta.kilroy:
-    url: grpcs://BLOCKCHAIN_NETWORK_IP_ADDRESS:8050
+    url: grpcs://orderer1.org.bta.kilroy:8050
     # these are standard properties defined by the gRPC library
     # they will be passed in as-is to gRPC client constructor
     grpcOptions:
@@ -98,7 +98,7 @@ orderers:
       path: ../crypto-files/ordererOrganizations/orderer.org.bta.kilroy/orderers/orderer1.org.bta.kilroy/tls/tlscacerts/tls-localhost-7054.pem
 
   orderer2.org.bta.kilroy:
-    url: grpcs://BLOCKCHAIN_NETWORK_IP_ADDRESS:9050
+    url: grpcs:// orderer2.org.bta.kilroy:9050
     # these are standard properties defined by the gRPC library
     # they will be passed in as-is to gRPC client constructor
     grpcOptions:
@@ -112,7 +112,7 @@ orderers:
 peers:
   peer0.o5-ai-engineer.bta.kilroy:
     # this URL is used to send endorsement and query requests
-    url: grpcs://BLOCKCHAIN_NETWORK_IP_ADDRESS:7091
+    url: grpcs:// peer0.o5-ai-engineer.bta.kilroy:7051
     grpcOptions:
       ssl-target-name-override: peer0.o5-ai-engineer.bta.kilroy
       request-timeout: 120001
@@ -148,7 +148,7 @@ client:
 
 certificateAuthorities:
   ica.o5-ai-engineer.bta.kilroy: # ca-org1
-    url: https://BLOCKCHAIN_NETWORK_IP_ADDRESS:7094
+    url: https://ica.o5-ai-engineer.bta.kilroy:7094
     # the properties specified under this object are passed to the 'http' client verbatim when
     # making the request to the Fabric-CA server
     httpOptions:
