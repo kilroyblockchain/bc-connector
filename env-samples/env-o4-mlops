@@ -1,5 +1,4 @@
 COMPOSE_PROJECT_NAME=kilroy 
-NETWORK=bta-network
 CONNECTION_FILE_PATH=src/blockchain-files/connection-profile/
 ICA_CONTAINER_NAME=ica.o4-mlops.bta.kilroy
 CA_ADMIN_ID=ica-o4-mlops-bta-kilroy
