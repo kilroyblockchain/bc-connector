@@ -99,7 +99,7 @@ orderers:
 peers:
   peer0.o1-super-admin.bta.kilroy:
     # this URL is used to send endorsement and query requests
-    url: grpcs://peer0.o1-super-admin.bta.kilroy:7051
+    url: grpcs://peer0.o1-super-admin.bta.kilroy:7041
     grpcOptions:
       ssl-target-name-override: peer0.o1-super-admin.bta.kilroy
       request-timeout: 120001
