@@ -112,7 +112,7 @@ orderers:
 peers:
   peer0.o2-admin.bta.kilroy:
     # this URL is used to send endorsement and query requests
-    url: grpcs://peer0.o2-admin.bta.kilroy:7051
+    url: grpcs://peer0.o2-admin.bta.kilroy:7061
     grpcOptions:
       ssl-target-name-override: peer0.o2-admin.bta.kilroy
       request-timeout: 120001
