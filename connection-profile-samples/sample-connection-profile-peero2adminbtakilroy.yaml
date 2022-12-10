@@ -80,7 +80,7 @@ organizations:
 #
 orderers:
   orderer0.org.bta.kilroy:
-    url: grpcs:// orderer0.org.bta.kilroy:7050
+    url: grpcs://orderer0.org.bta.kilroy:7050
     # these are standard properties defined by the gRPC library
     # they will be passed in as-is to gRPC client constructor
     grpcOptions:
@@ -98,7 +98,7 @@ orderers:
       path: ../crypto-files/ordererOrganizations/orderer.org.bta.kilroy/orderers/orderer1.org.bta.kilroy/tls/tlscacerts/tls-localhost-7054.pem
 
   orderer2.org.bta.kilroy:
-    url: grpcs:// orderer2.org.bta.kilroy:9050
+    url: grpcs://orderer2.org.bta.kilroy:9050
     # these are standard properties defined by the gRPC library
     # they will be passed in as-is to gRPC client constructor
     grpcOptions:
@@ -112,7 +112,7 @@ orderers:
 peers:
   peer0.o2-admin.bta.kilroy:
     # this URL is used to send endorsement and query requests
-    url: grpcs:// peer0.o2-admin.bta.kilroy:7051
+    url: grpcs://peer0.o2-admin.bta.kilroy:7051
     grpcOptions:
       ssl-target-name-override: peer0.o2-admin.bta.kilroy
       request-timeout: 120001

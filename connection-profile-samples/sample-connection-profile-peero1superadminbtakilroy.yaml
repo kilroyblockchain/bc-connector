@@ -76,7 +76,7 @@ orderers:
       path: ../crypto-files/ordererOrganizations/orderer.org.bta.kilroy/orderers/orderer0.org.bta.kilroy/tls/tlscacerts/tls-localhost-7054.pem
 
   orderer1.org.bta.kilroy:
-    url: grpcs:// orderer1.org.bta.kilroy:8050
+    url: grpcs://orderer1.org.bta.kilroy:8050
     # these are standard properties defined by the gRPC library
     # they will be passed in as-is to gRPC client constructor
     grpcOptions:

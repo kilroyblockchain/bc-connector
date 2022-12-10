@@ -67,7 +67,7 @@ organizations:
 #
 orderers:
   orderer0.org.bta.kilroy:
-    url: grpcs:// orderer0.org.bta.kilroy:7050
+    url: grpcs://orderer0.org.bta.kilroy:7050
     # these are standard properties defined by the gRPC library
     # they will be passed in as-is to gRPC client constructor
     grpcOptions:
