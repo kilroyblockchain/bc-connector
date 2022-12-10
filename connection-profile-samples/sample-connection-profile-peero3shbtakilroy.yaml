@@ -67,7 +67,7 @@ organizations:
 #
 orderers:
   orderer0.org.bta.kilroy:
-    url: grpcs:// orderer0.org.bta.kilroy:7050
+    url: grpcs://orderer0.org.bta.kilroy:7050
     # these are standard properties defined by the gRPC library
     # they will be passed in as-is to gRPC client constructor
     grpcOptions:
@@ -99,7 +99,7 @@ orderers:
 peers:
   peer0.o3-sh.bta.kilroy:
     # this URL is used to send endorsement and query requests
-    url: grpcs:// peer0.o3-sh.bta.kilroy:7051
+    url: grpcs://peer0.o3-sh.bta.kilroy:7051
     grpcOptions:
       ssl-target-name-override: peer0.o3-sh.bta.kilroy
       request-timeout: 120001
@@ -135,7 +135,7 @@ client:
 
 certificateAuthorities:
   ica.o3-sh.bta.kilroy: # ca-org1
-    url: https:// ica.o3-sh.bta.kilroy:7074
+    url: https://ica.o3-sh.bta.kilroy:7074
     # the properties specified under this object are passed to the 'http' client verbatim when
     # making the request to the Fabric-CA server
     httpOptions:
